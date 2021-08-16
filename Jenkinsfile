@@ -62,7 +62,7 @@ pipeline{
             steps{
                 withDockerRegistry(credentialsId:'DockerHub',url:'')
                 {
-                    bat "docker push feature:latest"
+                    bat "docker push ${registry}feature:latest"
                 }
             }
         }
