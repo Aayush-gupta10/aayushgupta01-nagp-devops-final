@@ -38,7 +38,7 @@ pipeline{
         stage('Test Cases')
         {
             steps{
-                bat "dotnet build test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover -l:trx;LogFileName=testresult.xml"
+                bat "dotnet build test XUnitTestProject1 /p:CollectCoverage=true /p:CoverletOutputFormat=opencover -l:trx;LogFileName=testresult.xml"
             }
         }
         stage('Stop Sonar Analysis')
