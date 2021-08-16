@@ -54,8 +54,7 @@ pipeline{
         {
             steps{
                 bat "docker build -t i-${username}-feature ."
-                bat 'docker tag i-${username}-feature ${registry}feature:$BUILD_NUMBER'
-                bat 'docker tag i-${username}-feature ${registry}feature:$latest'
+                bat 'docker tag i-${username}-feature feature:latest'
             }
         }
         stage('Push Docker Hub')
@@ -63,8 +62,7 @@ pipeline{
             steps{
                 withDockerRegistry(credentialsId:'DockerHub',url:'')
                 {
-                    bat "docker push ${registry}feature:$BUILD_NUMBER"
-                    bat "docker push ${registry}feature:$latest"
+                    bat "docker push feature:latest"
                 }
             }
         }
@@ -89,7 +87,7 @@ pipeline{
             steps{
                 parallel(
                     "Docker Deployment":{
-                        bat "docker run --name c-${username}-feature -d -p 7400:80 ${registry}$env.BRANCH_NAME:$latest"
+                        bat "docker run --name c-${username}-feature -d -p 7400:80 feature:latest"
                     },
                     "kubernetes deployment":
                     {
