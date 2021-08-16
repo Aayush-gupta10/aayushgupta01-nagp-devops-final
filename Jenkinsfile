@@ -54,7 +54,7 @@ pipeline{
         {
             steps{
                 bat "docker build -t i-${username}-feature ."
-                bat "docker tag i-${username}-feature feature:latest"
+                bat "docker tag i-${username}-feature aayushgup10/feature:latest"
             }
         }
         stage('Push Docker Hub')
@@ -87,7 +87,7 @@ pipeline{
             steps{
                 parallel(
                     "Docker Deployment":{
-                        bat "docker run --name c-${username}-feature -d -p 7400:80 feature:latest"
+                        bat "docker run --name c-${username}-feature -d -p 7400:80 aayushgup10/feature:latest"
                     },
                     "kubernetes deployment":
                     {
