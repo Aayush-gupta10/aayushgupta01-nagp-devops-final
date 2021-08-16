@@ -54,8 +54,8 @@ pipeline{
         {
             steps{
                 bat "docker build -t i-${username}-feature ."
-                bat "docker tag i-${username}-feature ${registry}feature:$BUILD_NUMBER"
-                bat "docker tag i-${username}-feature ${registry}feature:$latest"
+                bat 'docker tag i-${username}-feature ${registry}feature:$BUILD_NUMBER'
+                bat 'docker tag i-${username}-feature ${registry}feature:$latest'
             }
         }
         stage('Push Docker Hub')
