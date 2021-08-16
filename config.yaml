@@ -1,0 +1,8 @@
+appVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-settings
+  namespcae: aayushgupta01
+data:
+  NAMESPACE: aayushgupta01
+  ENVIRONMENT: dev 

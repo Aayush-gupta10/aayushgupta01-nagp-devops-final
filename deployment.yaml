@@ -1,0 +1,41 @@
+appVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-demo-app
+  namespace: aayushgupta01
+  labels:
+    app: dotnet-demo-app
+spec:
+  replicas: 3
+  selector: 
+    matchlabels:
+      app: dotnet-demo-app
+  template:
+    metadata:
+      labels: dotnet-demo-app
+    spec:
+      containers:
+        - name: dotnet-demo-app
+          envFrom:
+            - congigMapRef:
+              name: app-settings
+          image: aayushgupta10/feature:latest
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+---
+appVersion: v1
+kind: Service
+metadata:
+  name: dotnet-demo-app
+  namespace: aayushgupta01
+spec:
+  type: LoadBalancer
+  selector:
+    app: dotnet-demo-app
+  ports:
+    - port: 80
+      protocol: TCP
+      nodePort: 30157
+  
