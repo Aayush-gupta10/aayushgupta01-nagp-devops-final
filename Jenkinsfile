@@ -8,7 +8,9 @@ pipeline{
     stages{
         stage('Checkout')
         {
-            git url = "https://github.com/Aayush-gupta10/aayushgupta01-nagp-devops-final.git"
+            steps{
+                git url : "https://github.com/Aayush-gupta10/aayushgupta01-nagp-devops-final.git"
+            }
         }
         stage('nuget restore')
         {
