@@ -14,13 +14,17 @@ pipeline{
         }
         stage('nuget restore')
         {
+            steps{
             bat "dotnet restore"
+            }
         }
         stage('Start Sonar Qube Analysis')
         {
-            withSonarQubeEnv('Test_Sonar')
-            {
-                bat "${scannerHome}\\SonarScanner.MSBuild.exe begin /k:aayushgupta01 -d:sonar.cs.opencover.reportsPaths=XUnitTestProject1/coverage.opencover.xml -d:sonar.cs.xunit.reportPaths=XUnitTestProject1/TestResults/testresult.xml"
+            steps{
+                withSonarQubeEnv('Test_Sonar')
+                {
+                    bat "${scannerHome}\\SonarScanner.MSBuild.exe begin /k:aayushgupta01 -d:sonar.cs.opencover.reportsPaths=XUnitTestProject1/coverage.opencover.xml -d:sonar.cs.xunit.reportPaths=XUnitTestProject1/TestResults/testresult.xml"
+                }
             }
         }
         stage('Build')
@@ -39,9 +43,11 @@ pipeline{
         }
         stage('Stop Sonar Analysis')
         {
-            withSonarQubeEnv('Test_Sonar')
-            {
-                bat "${scannerHome}\\SonarScanner.MSBuild.exe end"
+            steps{
+                withSonarQubeEnv('Test_Sonar')
+                {
+                    bat "${scannerHome}\\SonarScanner.MSBuild.exe end"
+                }
             }
         }
         stage('Build Docker')
@@ -55,7 +61,7 @@ pipeline{
         stage('Push Docker Hub')
         {
             steps{
-                withDockerRegistry(credentialsID:'DockerHub',url:'')
+                withDockerRegistry(credentialsId:'DockerHub',url:'')
                 {
                     bat "docker push ${registry}$env.BRANCH_NAME:$BUILD_NUMBER"
                     bat "docker push ${registry}$env.BRANCH_NAME:$latest"
@@ -64,15 +70,17 @@ pipeline{
         }
         stage('Delete Contianer if running')
         {
-            script{
-                env.containerId = bat(script:"docker ps -a -f publish 7400 -q", returnStdout=true).trim().readlines().drop(1).join()
-                if(env.containerId == '')
-                {
-                    echo "No conatiner is running"
-                }
-                else{
-                    bat "docker stop ${enev.containerId}"
-                    bat "docker rm ${enev.containerId}"
+            steps{
+                script{
+                    env.containerId = bat(script:"docker ps -a -f publish 7400 -q", returnStdout=true).trim().readlines().drop(1).join()
+                    if(env.containerId == '')
+                    {
+                        echo "No conatiner is running"
+                    }
+                    else{
+                        bat "docker stop ${enev.containerId}"
+                        bat "docker rm ${enev.containerId}"
+                    }
                 }
             }
         }
